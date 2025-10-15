@@ -16,10 +16,10 @@ arcade.start_render()
 
 # # Draw a filled ellipse, and another one rotated
 
-# for x in range(20,800,100):
-#     for y in range(20, 600, 100):
-#
-#         arcade.draw_rectangle_filled(x, y, 45, 45, arcade.color.BLUE)
+for x in range(20,800,100):
+    for y in range(20, 600, 100):
+        arcade.draw_rect_filled(arcade.rect.XYWH(x, y, 45, 65), arcade.color.BLUE)
+
 
 
 arcade.finish_render()

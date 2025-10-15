@@ -9,7 +9,7 @@ arcade.set_background_color(arcade.color.GRAY_BLUE)
 arcade.start_render()
 
 
-arcade.draw_rectangle_filled(22, 33, 44, 66, arcade.color.BLUSH)
+arcade.draw_rect_filled(arcade.rect.XYWH(22, 33, 44, 66), arcade.color.BLUSH)
 
 
 

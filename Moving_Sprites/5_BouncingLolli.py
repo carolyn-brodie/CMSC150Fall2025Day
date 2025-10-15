@@ -6,11 +6,17 @@ SCREEN_HEIGHT = 600
 
 class Lolli (arcade.Sprite):
 
-    def __init__(self, image, scale):
-        super().__init__(image,scale)
+    def __init__(self, filename, scale):
+        super().__init__(filename, scale=scale)
+
+        self.change_x = 0
+
+        self.change_y = 0
 
 
-    def update(self):
+    def update(self, delta_time: float = 1 / 60):
+
+
         ## bounce off sides
         if self.left <= 0 or self.right >= SCREEN_WIDTH:
             self.change_x *= -1
@@ -20,21 +26,24 @@ class Lolli (arcade.Sprite):
 
         self.center_x += self.change_x
         self.center_y += self.change_y
-        super().update()
 
 
-class Game(arcade. Window):
+
+
+
+class Game(arcade. View):
     """ Main application class """
 
-    def __init__(self, width, height):
-        super().__init__(width, height)
+    def __init__(self):
+        """ Initializer """
+        super().__init__()
         # Background image will be stored in this variable
         self.background = None
         self.lolli = None
-        self.all_sprites_list = []
+
 
         # Do show the mouse cursor
-        self.set_mouse_visible(True)
+        self.window.set_mouse_visible(True)
 
         # Set the background color
         arcade.set_background_color(arcade.color.BLACK)
@@ -56,26 +65,48 @@ class Game(arcade. Window):
 
     def on_draw(self):
         """Render the screen. """
-        arcade.start_render()
+        self.clear()
 
         # Draw the background texture
-        arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,
-                                      SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
+        scale = 1
+
+        ## arcade.XYWH(x, y, width, height)
+        arcade.draw_texture_rect(
+
+            self.background,
+
+            arcade.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH, SCREEN_HEIGHT).scale(scale)
+
+        )
+
+        self.all_sprites_list.draw()
 
 
-        self.lolli.draw()
-
-
-    def update(self, delta_time):
+    def on_update(self, delta_time):
         """All the logic to move, and the game logic goes here. """
-        self.lolli.update()
+        self.all_sprites_list.update(delta_time)
 
 
 def main():
     """ Main method """
-    window = Game(SCREEN_WIDTH, SCREEN_HEIGHT)
-    window.setup()
+    """ Main method """
+    window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Moving Lolli")
+
+    # Create and setup the GameView
+
+    game = Game()
+
+    game.setup()
+    # Show GameView on screen
+
+    window.show_view(game)
+
+    # Start the arcade game loop
+
     arcade.run()
+
 
 if __name__ == "__main__":
     main()
+
+main()

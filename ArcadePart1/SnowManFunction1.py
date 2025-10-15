@@ -9,7 +9,7 @@ def main():
     arcade.start_render()
 
     # Draw the ground
-    arcade.draw_lrtb_rectangle_filled(0, SCREEN_WIDTH, SCREEN_HEIGHT / 3, 0, arcade.color.AIR_SUPERIORITY_BLUE)
+    arcade.draw_rect_filled(arcade.rect.XYWH(SCREEN_WIDTH//2, SCREEN_HEIGHT // 6, SCREEN_WIDTH, SCREEN_WIDTH // 3), arcade.color.AIR_SUPERIORITY_BLUE)
 
     # Draw a snow person
 

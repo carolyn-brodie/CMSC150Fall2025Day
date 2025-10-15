@@ -17,9 +17,8 @@ class Game(arcade.Window):
         super().__init__(width, height)
         # Background image will be stored in this variable
         self.background = None
-        self.lolli = None
         self.frame_count = 0
-        self.all_sprites_list = []
+
 
 
         # Do show the mouse cursor
@@ -29,29 +28,40 @@ class Game(arcade.Window):
         arcade.set_background_color(arcade.color.BLACK)
 
     def setup(self):
-
+        self.lolli_list = arcade.SpriteList()
         self.background = arcade.load_texture("images/wall.jpg")
         ##Display a sprite
-        self.lolli = arcade.Sprite("images/lollipopRed.png")
-        self.lolli.scale = .75
-        self.lolli.center_x = SCREEN_WIDTH / 2
-        self.lolli.top = SCREEN_HEIGHT / 2
+        lolli = arcade.Sprite("images/lollipopRed.png")
+        lolli.scale = .75
+        lolli.center_x = SCREEN_WIDTH // 2
+        lolli.top = SCREEN_HEIGHT // 2
+        self.lolli_list.append(lolli)
 
 
     def on_draw(self):
 
         """Render the screen. """
-        arcade.start_render()
+        self.clear()
+        # arcade.start_render()
 
         # Draw the background texture
-        arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,
-                                      SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
 
-        self.lolli.draw()
+        scale = 1
+
+        ## arcade.XYWH(x, y, width, height)
+        arcade.draw_texture_rect(
+
+            self.background,
+
+            arcade.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH, SCREEN_HEIGHT).scale(scale)
+
+        )
+
+        self.lolli_list.draw()
 
     def update(self, delta_time):
         """All the logic to move, and the game logic goes here. """
-        self.lolli.update()
+        self.lolli_list.update()
 
 
 def main():

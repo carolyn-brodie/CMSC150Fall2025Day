@@ -10,7 +10,7 @@ class Lolli (arcade.Sprite):
         super().__init__(image,scale)
         self.bounce_sound = arcade.load_sound(bounce_sound)
 
-    def update(self):
+    def update(self, delta_time: float = 1 / 60):
         ## bounce off sides
         if self.left <= 0 or self.right >= SCREEN_WIDTH:
             arcade.play_sound(self.bounce_sound)
@@ -22,7 +22,7 @@ class Lolli (arcade.Sprite):
 
         self.center_x += self.change_x
         self.center_y += self.change_y
-        super().update()
+
 
 class InstructionView(arcade.View):
     def on_show_view(self):
@@ -50,7 +50,6 @@ class Game(arcade.View):    ## Change arcade.Window to arcade.View
         # Background image will be stored in this variable
         self.background = None
         self.lolli = None
-        self.all_sprites_list = []
         self.sound = None
 
 
@@ -82,19 +81,28 @@ class Game(arcade.View):    ## Change arcade.Window to arcade.View
 
     def on_draw(self):
         """Render the screen. """
-        arcade.start_render()
+        self.clear()
 
         # Draw the background texture
-        arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,
-                                      SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
-        self.lolli.draw()
+        scale = 1
+
+        ## arcade.XYWH(x, y, width, height)
+        arcade.draw_texture_rect(
+
+            self.background,
+
+            arcade.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH, SCREEN_HEIGHT).scale(scale)
+
+        )
+
+        self.all_sprites_list.draw()
 
 
 
-    def update(self, delta_time):
+    def on_update(self, delta_time):
         """All the logic to move, and the game logic goes here. """
 
-        self.lolli.update()
+        self.all_sprites_list.update()
 
 
 
