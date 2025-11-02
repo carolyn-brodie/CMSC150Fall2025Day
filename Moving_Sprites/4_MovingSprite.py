@@ -19,21 +19,6 @@ class Lolli (arcade.Sprite):
 
         self.center_y += self.change_y
 
-        # If we are out-of-bounds, then 'bounce'
-
-        # if self.left < 0:
-        #     self.change_x *= -1
-        #
-        # if self.right > SCREEN_WIDTH:
-        #     self.change_x *= -1
-        #
-        # if self.bottom < 0:
-        #     self.change_y *= -1
-        #
-        # if self.top > SCREEN_HEIGHT:
-        #     self.change_y *= -1
-
-
 class Game(arcade.View):
     """ Main application class """
 
@@ -44,17 +29,12 @@ class Game(arcade.View):
 
         super().__init__()
         # Background image will be stored in this variable
-        # self.background = None
-        # self.lolli = None
+        self.background = None
+        self.lolli = None
 
+        self.window.set_mouse_visible(False)
 
-
-        # Do show the mouse cursor
-        self.window.set_mouse_visible(True)
-
-
-        # Set the background color
-        arcade.set_background_color(arcade.color.BLACK)
+        self.background_color = arcade.color.AMAZON
 
 
     def setup(self):
@@ -101,7 +81,6 @@ class Game(arcade.View):
         # Call update on all sprites (The sprites don't do much in this
 
         # example though.)
-
         self.all_sprites_list.update(delta_time)
 
 
@@ -131,4 +110,3 @@ if __name__ == "__main__":
 
     main()
 
-main()

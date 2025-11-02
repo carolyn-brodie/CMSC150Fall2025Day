@@ -26,6 +26,7 @@ class Lolli (arcade.Sprite):
 
         self.center_x += self.change_x
         self.center_y += self.change_y
+        super().update()
 
 
 
@@ -109,4 +110,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-main()

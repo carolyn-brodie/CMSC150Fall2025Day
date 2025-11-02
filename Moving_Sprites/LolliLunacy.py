@@ -9,7 +9,15 @@ TIMEBETWEENDROPS = 100
 
 
 class Bunny(arcade.Sprite):
-    def update(self):
+    def __init__(self, filename, scale):
+        super().__init__(filename, scale=scale)
+
+        self.change_x = 0
+
+        self.change_y = 0
+
+
+    def update(self, delta_time: float = 1 / 60):
 
         ## bounce off sides
         if self.left <= 0 or self.right >= SCREEN_WIDTH:
@@ -48,9 +56,9 @@ class MyApplication(arcade.View):
         self.background = None
 
         self.frame_count = 0
-        self.all_sprites_list = []
+
         self.Bunny = None
-        self.lolli_list = []
+
 
         self.player = None
         self.score = 0
@@ -69,12 +77,15 @@ class MyApplication(arcade.View):
         self.background = arcade.load_texture("./images/wall.jpg")
         self.all_sprites_list = arcade.SpriteList()
         self.lolli_list = arcade.SpriteList()
+        self.bunny_list = arcade.SpriteList()
+        self.player_list = arcade.SpriteList()
         # Score
         self.score = 0
 
 
         self.player = arcade.Sprite(":resources:images/tiles/plantPurple.png", 1)
         self.all_sprites_list.append(self.player)
+        self.player_list.append(self.player)
 
         self.bunny = Bunny("./images/rabbit.png", 1)
         self.bunny.scale = .3
@@ -82,19 +93,25 @@ class MyApplication(arcade.View):
         self.bunny.center_y = SCREEN_HEIGHT - self.bunny.height
         self.bunny.angle = 0
         self.bunny.change_x = 1
+        self.bunny_list.append(self.bunny)
         self.all_sprites_list.append(self.bunny)
 
     def on_draw(self):
         """Render the screen. """
 
-        arcade.start_render()
+        self.clear()
         # Draw the background texture
-        arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,
-                                      SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
+        scale = 1
+        arcade.draw_texture_rect(
 
-        self.bunny.draw()
+            self.background,
+
+            arcade.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH, SCREEN_HEIGHT).scale(scale)
+
+        )
+        self.bunny_list.draw()
         self.lolli_list.draw()
-        self.player.draw()
+        self.player_list.draw()
 
         # Put the text on the screen.
         output = f"Score: {self.score}"
@@ -109,7 +126,7 @@ class MyApplication(arcade.View):
 
 
 
-    def update(self, delta_time):
+    def on_update(self, delta_time):
         """All the logic to move, and the game logic goes here. """
 
         # Determine when to drop next lollipop
@@ -148,7 +165,7 @@ class MyApplication(arcade.View):
 
 
         self.lolli_list.update()
-        self.bunny.update()
+        self.bunny_list.update()
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
         """ Called whenever the mouse moves. """

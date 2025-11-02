@@ -9,7 +9,7 @@ class Lolli (arcade.Sprite):
         super().__init__(image,scale)
         self.bounce_sound = arcade.load_sound(bounce_sound)
 
-    def update(self):
+    def update(self, delta_time: float = 1 / 60):
         ## bounce off sides
         if self.left <= 0 or self.right >= SCREEN_WIDTH:
             arcade.play_sound(self.bounce_sound)
@@ -24,21 +24,21 @@ class Lolli (arcade.Sprite):
         super().update()
 
 
-class Game(arcade.Window):
+class Game(arcade.View):    ## Change arcade.Window to arcade.View
     """ Main application class """
 
-    def __init__(self, width, height):
-        super().__init__(width, height)
+    def __init__(self):  ## no width and height here
+        super().__init__()
         # Background image will be stored in this variable
         self.background = None
         self.lolli = None
-        self.all_sprites_list = []
+
         self.sound = None
 
 
 
         # Do show the mouse cursor
-        self.set_mouse_visible(True)
+        self.window.set_mouse_visible(True)
 
         # Set the background color
         arcade.set_background_color(arcade.color.BLACK)
@@ -64,29 +64,38 @@ class Game(arcade.Window):
 
     def on_draw(self):
         """Render the screen. """
-        arcade.start_render()
+        self.clear() ## add for 3.3
 
         # Draw the background texture
-        arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,
-                                      SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
+        scale = 1
+
+        ## arcade.XYWH(x, y, width, height)
+        arcade.draw_texture_rect(
+
+            self.background,
+
+            arcade.XYWH(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH, SCREEN_HEIGHT).scale(scale)
+
+        )
+
+        self.all_sprites_list.draw()
 
 
-        self.lolli.draw()
 
-
-
-    def update(self, delta_time):
+    def on_update(self, delta_time):
         """All the logic to move, and the game logic goes here. """
 
-        self.lolli.update()
+        self.all_sprites_list.update()
 
 
 
 
 def main():
     """ Main method """
-    window = Game(SCREEN_WIDTH, SCREEN_HEIGHT)
-    window.setup()
+    window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Bouncing Lolli")
+    game = Game()
+    game.setup()
+    window.show_view(game)
     arcade.run()
 
 

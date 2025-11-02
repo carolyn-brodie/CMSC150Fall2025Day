@@ -1,13 +1,3 @@
-"""
-Sprite Collect Coins
-
-Simple program to show basic sprite usage.
-
-Artwork from http://kenney.nl
-
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.sprite_collect_coins
-"""
 
 import random
 import arcade
@@ -16,33 +6,52 @@ import arcade
 SPRITE_SCALING_PLAYER = 0.5
 SPRITE_SCALING_COIN = .25
 COIN_COUNT = 50
+MOVEMENT_SPEED = 5
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Sprite Collect Coins Example"
+SCREEN_WIDTH = 1280
+
+SCREEN_HEIGHT = 720
+
+WINDOW_TITLE = "Sprite Collect Coins Example"
 
 
-class MyGame(arcade.Window):
-    """ Our custom Window Class"""
+class GameView(arcade.View):
+
 
     def __init__(self):
+
         """ Initializer """
+
         # Call the parent class initializer
-        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+
+        super().__init__()
+
 
         # Variables that will hold sprite lists
+
         self.player_list = None
+
         self.coin_list = None
 
-        # Set up the player info
+
+        # Create a variable to hold the player sprite
+
         self.player_sprite = None
+
+
+        # Variables to hold the score and the Text object displaying it
+
         self.score = 0
 
-        # Don't show the mouse cursor
-        self.set_mouse_visible(False)
+        self.score_display = None
 
-        arcade.set_background_color(arcade.color.AMAZON)
 
+        # Hide the mouse cursor while it's over the window
+
+        self.window.set_mouse_visible(False)
+
+
+        self.background_color = arcade.color.AMAZON
     def setup(self):
         """ Set up the game and initialize the variables. """
 
@@ -56,7 +65,7 @@ class MyGame(arcade.Window):
         # Set up the player
         # Character image from kenney.nl
         img = ":resources:images/animated_characters/female_person/femalePerson_idle.png"
-        self.player_sprite = arcade.Sprite(img, SPRITE_SCALING_PLAYER)
+        self.player_sprite = arcade.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png", SPRITE_SCALING_PLAYER)
         self.player_sprite.center_x = 50
         self.player_sprite.center_y = 50
         self.player_list.append(self.player_sprite)
@@ -78,8 +87,10 @@ class MyGame(arcade.Window):
 
     def on_draw(self):
         """ Draw everything """
-        # arcade.start_render()
+        # arcade.start_rehttps://api.arcade.academy/en/latest/tutorials/bundling_with_pyinstaller/index.htmlnder()
         self.clear()
+        ## REmove Render and add clear
+        # arcade.start_render()
         self.coin_list.draw()
         self.player_list.draw()
 
@@ -91,12 +102,18 @@ class MyGame(arcade.Window):
         """ Handle Mouse Motion """
 
         # Move the center of the player sprite to match the mouse x, y
-        self.player_sprite.center_x = x
-        self.player_sprite.center_y = y
+        # self.player_sprite.center_x = x
+        # self.player_sprite.center_y = y
+        self.player_sprite.position = x, y
+
+
 
     def on_update(self, delta_time):
         """ Movement and game logic """
 
+
+        ##This is needed if using the keyboard.
+        self.player_list.update()
         # Call update on all sprites (The sprites don't do much in this
         # example though.)
         self.coin_list.update()
@@ -113,8 +130,22 @@ class MyGame(arcade.Window):
 
 def main():
     """ Main method """
-    window = MyGame()
-    window.setup()
+    # Create a window class. This is what actually shows up on screen
+
+    window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE)
+
+    # Create and setup the GameView
+
+    game = GameView()
+
+    game.setup()
+
+    # Show GameView on screen
+
+    window.show_view(game)
+
+    # Start the arcade game loop
+
     arcade.run()
 
 

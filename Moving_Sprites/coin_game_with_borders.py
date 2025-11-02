@@ -8,12 +8,20 @@ SPRITE_SCALING_COIN = .25
 COIN_COUNT = 50
 MOVEMENT_SPEED = 5
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Sprite Collect Coins Example"
+SCREEN_WIDTH = 1280
+
+SCREEN_HEIGHT = 720
+
+WINDOW_TITLE = "Sprite Collect Coins Example"
 
 class Person(arcade.Sprite):
-    def update(self):
+    def __init__(self, filename, scale):
+        super().__init__(filename, scale=scale)
+        self.change_x = 0
+
+        self.change_y = 0
+
+    def update(self, delta_time: float = 1 / 60):
 
         if self.left <= 0:
             self.center_x = SCREEN_WIDTH - 10
@@ -31,27 +39,44 @@ class Person(arcade.Sprite):
         self.center_x += self.change_x
         self.center_y += self.change_y
         super().update()
-class MyGame(arcade.Window):
-    """ Our custom Window Class"""
+
+class GameView(arcade.View):
+
 
     def __init__(self):
+
         """ Initializer """
+
         # Call the parent class initializer
-        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+
+        super().__init__()
+
 
         # Variables that will hold sprite lists
+
         self.player_list = None
+
         self.coin_list = None
 
-        # Set up the player info
+
+        # Create a variable to hold the player sprite
+
         self.player_sprite = None
+
+
+        # Variables to hold the score and the Text object displaying it
+
         self.score = 0
 
-        # Don't show the mouse cursor
-        self.set_mouse_visible(False)
+        self.score_display = None
 
-        arcade.set_background_color(arcade.color.AMAZON)
 
+        # Hide the mouse cursor while it's over the window
+
+        self.window.set_mouse_visible(False)
+
+
+        self.background_color = arcade.color.AMAZON
     def setup(self):
         """ Set up the game and initialize the variables. """
 
@@ -87,7 +112,10 @@ class MyGame(arcade.Window):
 
     def on_draw(self):
         """ Draw everything """
-        arcade.start_render()
+        # arcade.start_rehttps://api.arcade.academy/en/latest/tutorials/bundling_with_pyinstaller/index.htmlnder()
+        self.clear()
+        ## REmove Render and add clear
+        # arcade.start_render()
         self.coin_list.draw()
         self.player_list.draw()
 
@@ -99,8 +127,9 @@ class MyGame(arcade.Window):
     #     """ Handle Mouse Motion """
     #
     #     # Move the center of the player sprite to match the mouse x, y
-    #     self.player_sprite.center_x = x
-    #     self.player_sprite.center_y = y
+    #     # self.player_sprite.center_x = x
+    #     # self.player_sprite.center_y = y
+    #     self.player_sprite.position = x, y
 
     def on_key_press(self, key, modifiers):
         """
@@ -146,8 +175,22 @@ class MyGame(arcade.Window):
 
 def main():
     """ Main method """
-    window = MyGame()
-    window.setup()
+    # Create a window class. This is what actually shows up on screen
+
+    window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE)
+
+    # Create and setup the GameView
+
+    game = GameView()
+
+    game.setup()
+
+    # Show GameView on screen
+
+    window.show_view(game)
+
+    # Start the arcade game loop
+
     arcade.run()
 
 
